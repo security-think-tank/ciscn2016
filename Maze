@@ -1,0 +1,86 @@
+int __cdecl sub_401150(const char *a1)
+{
+  const char *v1; // edx@1
+  int result; // eax@2
+  const char v3; // al@3
+  int sum; // ebx@3
+  int v5; // ecx@3
+  int v6; // esi@3
+  signed int v7; // edi@3
+  int add; // ebp@4
+  int v9; // edx@7
+  signed int v10; // ebx@8
+  signed int v11; // eax@11
+  int v12; // [sp+0h] [bp-4h]@3
+
+  v1 = a1;
+  if ( strlen(a1) & 1 )                         // 偶数长度
+    return 0;
+  v3 = *a1;
+  sum = 0;
+  v5 = 0;
+  v6 = 0;
+  v7 = -1;
+  v12 = 0;
+  if ( !*a1 )
+    goto LABEL_21;
+  add = 0;
+  do
+  {
+    if ( v3 < 'a' || v3 > 'd' )
+      goto LABEL_17;
+    v9 = v1[1] - 'e';
+    if ( (unsigned int)v9 > 0x15 )              // v9 > 'z' 
+    {
+      v1 = a1;
+LABEL_17:
+      ++sum;
+      goto LABEL_18;
+    }
+    v10 = v7;
+    switch ( v3 )
+    {
+      case 'a':                                 // left
+                                                // 
+        v7 = 0;			//v7用来判断不能连续两侧横走或者竖走
+        v6 = (v6 - v9) % 22;
+        add = *(&maze[22 * v5] + v6);
+        break;
+      case 'b':                                 // right
+                                                // 
+        v7 = 0;
+        v6 = (v9 + v6) % 22;
+        goto LABEL_14;
+      case 'c':                                 // up
+                                                // 
+        v11 = v5 - v9;
+        goto LABEL_13;
+      case 'd':                                 // down
+                                                // 
+        v11 = v9 + v5;
+LABEL_13:
+        v7 = 1;
+        v5 = v11 % 22;
+LABEL_14:
+        add = *(&maze[22 * v5] + v6);
+        break;
+      default:
+        break;
+    }
+    *(&maze[22 * v5] + v6) = 0;
+    sum = v12 + (add ^ 1) + (v10 == v7);
+    v1 = a1;
+LABEL_18:
+    v3 = v1[2];
+    v1 += 2;
+    v12 = sum;
+    a1 = v1;
+  }
+  while ( v3 );
+  if ( v5 != 0x15 || v6 != 0x15 )
+LABEL_21:
+    ++sum;
+  result = sum < 0;
+  LOBYTE(result) = sum <= 0;
+  return result;
+}
